@@ -181,7 +181,6 @@ public class CountdownLabel: LTMorphingLabel {
         
         // if end of timer
         if endOfTimer {
-            text = dateFormatter.string(from: date1970.addingTimeInterval(0) as Date)
             countdownDelegate?.countdownFinished?()
             dispose()
             completion?()
@@ -275,10 +274,16 @@ extension CountdownLabel {
         guard diffDate != nil else { return }
         
         let date = diffDate.addingTimeInterval(round(timeCounted * -1)) as Date
+        /*
         // if time is before start
         let formattedText = timeCounted < 0
             ? dateFormatter.string(from: date1970.addingTimeInterval(0) as Date)
             : self.surplusTime(date)
+        */
+        if timeCounted < 0 {
+            return
+        }
+        let formattedText = self.surplusTime(date)
         
         if let countdownAttributedText = countdownAttributedText {
             let attrTextInRange = NSAttributedString(string: formattedText, attributes: countdownAttributedText.attributes)
@@ -296,45 +301,40 @@ extension CountdownLabel {
     //fix one day bug
     func surplusTime(_ to1970Date: Date) -> String {
         let calendar = Calendar.init(identifier: .gregorian)
-        var labelText = dateFormatter.string(from: to1970Date)
+        
+        var act_tags: Array = Array<String>()
+        
+//        var labelText = dateFormatter.string(from: to1970Date)
+        var labelText = ""
         let comp = calendar.dateComponents([.day, .hour, .minute, .second], from: date1970 as Date, to: to1970Date)
         
         // if day0 hour0 (24m10s) yes, day0 hour1 (12h10m) yes,d0 h1 m0 (10h0s) yes, day1 hour0 (2d10m)yes, day1 hour1 (1d1h)
-        if let day = comp.day ,let _ = timeFormat.range(of: "dd"),let hour = comp.hour ,let _ = timeFormat.range(of: "hh"),let minute = comp.minute ,let _ = timeFormat.range(of: "mm"),let second = comp.second ,let _ = timeFormat.range(of: "ss") {
-            if day == 0 {
-                if hour == 0 {
-                    labelText = labelText.replacingOccurrences(of: "dd:", with: "")
-                    labelText = labelText.replacingOccurrences(of: "hh:", with: "")
-                    labelText = labelText.replacingOccurrences(of: "mm", with: String.init(format: "%02ldM", minute))
-                    labelText = labelText.replacingOccurrences(of: "ss", with: String.init(format: "%02ldS", second))
-                } else {
-                    if minute == 0 {
-                        labelText = labelText.replacingOccurrences(of: "dd:", with: "")
-                        labelText = labelText.replacingOccurrences(of: "hh", with: String.init(format: "%02ldH", hour))
-                        labelText = labelText.replacingOccurrences(of: "mm:", with: "")
-                        labelText = labelText.replacingOccurrences(of: "ss", with: String.init(format: "%02ldS", second))
-                    } else {
-                        labelText = labelText.replacingOccurrences(of: "dd:", with: "")
-                        labelText = labelText.replacingOccurrences(of: "hh", with: String.init(format: "%02ldH", hour))
-                        labelText = labelText.replacingOccurrences(of: "mm", with: String.init(format: "%02ldM", minute))
-                        labelText = labelText.replacingOccurrences(of: ":ss", with: "")
-                    }
-                }
-            } else {
-                if hour == 0 {
-                    labelText = labelText.replacingOccurrences(of: "dd", with: String.init(format: "%02ldD", day))
-                    labelText = labelText.replacingOccurrences(of: "hh:", with: "")
-                    labelText = labelText.replacingOccurrences(of: "mm", with: String.init(format: "%02ldM", minute))
-                    labelText = labelText.replacingOccurrences(of: ":ss", with: "")
-                } else {
-                    labelText = labelText.replacingOccurrences(of: "dd", with: String.init(format: "%02ldD", day))
-                    labelText = labelText.replacingOccurrences(of: "hh", with: String.init(format: "%02ldH", hour))
-                    labelText = labelText.replacingOccurrences(of: ":mm", with: "")
-                    labelText = labelText.replacingOccurrences(of: ":ss", with: "")
-                }
+//        if let day = comp.day ,let _ = timeFormat.range(of: "dd"),let hour = comp.hour ,let _ = timeFormat.range(of: "hh"),let minute = comp.minute ,let _ = timeFormat.range(of: "mm"),let second = comp.second ,let _ = timeFormat.range(of: "ss") {
+        if let day = comp.day ,let hour = comp.hour ,let minute = comp.minute ,let second = comp.second {
+            
+            if (timeFormat.range(of: "dd") != nil) {
+                //                labelText += String.init(format: "%02ld", day)
+                act_tags.append(String.init(format: "%02ld", day))
             }
+            
+            if (timeFormat.range(of: "hh") != nil) {
+                //                labelText += String.init(format: "%02ld", hour)
+                act_tags.append(String.init(format: "%02ld", hour))
+            }
+            
+            if (timeFormat.range(of: "mm") != nil) {
+                //                labelText += String.init(format: "%02ld", minute)
+                act_tags.append(String.init(format: "%02ld", minute))
+            }
+            
+            if (timeFormat.range(of: "ss") != nil) {
+                //                labelText += String.init(format: "%02ld", second)
+                act_tags.append(String.init(format: "%02ld", second))
+            }
+            
         }
-        
+        labelText = act_tags.joined(separator: ":")
+        print("labelText\(labelText)")
         return labelText
     }
     
