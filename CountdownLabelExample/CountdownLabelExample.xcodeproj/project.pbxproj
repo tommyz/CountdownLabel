@@ -23,13 +23,6 @@
 			remoteGlobalIDString = 89993D911C3FAD910099AC14;
 			remoteInfo = CountdownLabelExample;
 		};
-		8999B52B1C4F300300C46F10 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 89993DB71C3FAE1C0099AC14 /* CountdownLabel.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 8999B51B1C4F2F7200C46F10;
-			remoteInfo = CountdownLabelTests;
-		};
 		89CA989A1C4E3C5B00C74EF9 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 89993DB71C3FAE1C0099AC14 /* CountdownLabel.xcodeproj */;
@@ -105,7 +98,6 @@
 			isa = PBXGroup;
 			children = (
 				89CA989B1C4E3C5B00C74EF9 /* CountdownLabel.framework */,
-				8999B52C1C4F300300C46F10 /* CountdownLabelTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -173,6 +165,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -194,13 +187,6 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		8999B52C1C4F300300C46F10 /* CountdownLabelTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = CountdownLabelTests.xctest;
-			remoteRef = 8999B52B1C4F300300C46F10 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		89CA989B1C4E3C5B00C74EF9 /* CountdownLabel.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
@@ -387,7 +373,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.keishi.suzuki.CountdownLabelExample;
 				PRODUCT_NAME = CountdownLabelExample;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -401,7 +387,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.keishi.suzuki.CountdownLabelExample;
 				PRODUCT_NAME = CountdownLabelExample;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};

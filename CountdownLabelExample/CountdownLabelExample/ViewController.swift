@@ -29,41 +29,45 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let timeInterval: TimeInterval = 10
         // 1. normal
-        countdownLabel1.setCountDownTime(minutes: 60*60)
+        countdownLabel1.setCountDownTime(minutes: timeInterval)
+        countdownLabel1.countdownDelegate = self
+        countdownLabel1.timeFormat = "mm:ss"
         countdownLabel1.start()
 
         // option animation ( using LTMorphing inside )
-        countdownLabelAnvil.setCountDownTime(minutes: 60*60)
+        countdownLabelAnvil.setCountDownTime(minutes: timeInterval)
+        countdownLabelAnvil.countdownDelegate = self
         countdownLabelAnvil.animationType = .Anvil
         countdownLabelAnvil.start()
 
-        countdownLabelBurn.setCountDownTime(minutes: 60*60)
+        countdownLabelBurn.setCountDownTime(minutes: timeInterval)
         countdownLabelBurn.animationType = .Burn
         countdownLabelBurn.start()
         
-        countdownLabelEvaporate.setCountDownTime(minutes: 60*60)
+        countdownLabelEvaporate.setCountDownTime(minutes: timeInterval)
         countdownLabelEvaporate.animationType = .Evaporate
         countdownLabelEvaporate.start()
         
-        countdownLabelFall.setCountDownTime(minutes: 60*60)
+        countdownLabelFall.setCountDownTime(minutes: timeInterval)
         countdownLabelFall.animationType = .Fall
         countdownLabelFall.start()
         
-        countdownLabelPixelate.setCountDownTime(minutes: 60*60)
+        countdownLabelPixelate.setCountDownTime(minutes: timeInterval)
         countdownLabelPixelate.animationType = .Pixelate
         countdownLabelPixelate.start()
         
-        countdownLabelScale.setCountDownTime(minutes: 60*60)
+        countdownLabelScale.setCountDownTime(minutes: timeInterval)
         countdownLabelScale.animationType = .Scale
         countdownLabelScale.start()
         
-        countdownLabelSparkle.setCountDownTime(minutes: 60*60)
+        countdownLabelSparkle.setCountDownTime(minutes: timeInterval)
         countdownLabelSparkle.animationType = .Sparkle
         countdownLabelSparkle.start()
         
         // 2. style
-        countdownLabel2.setCountDownTime(minutes: 60*60)
+        countdownLabel2.setCountDownTime(minutes: timeInterval)
         countdownLabel2.animationType = .Evaporate
         countdownLabel2.textColor = UIColor.orange
         countdownLabel2.font = UIFont(name:"Courier", size:UIFont.labelFontSize)
@@ -146,6 +150,7 @@ class ViewController: UIViewController {
 extension ViewController: CountdownLabelDelegate {
     func countdownFinished() {
         debugPrint("countdownFinished at delegate.")
+        countdownLabel1.text = "done"
     }
     
     func countingAt(timeCounted: TimeInterval, timeRemaining: TimeInterval) {
