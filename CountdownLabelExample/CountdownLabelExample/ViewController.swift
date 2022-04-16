@@ -32,8 +32,11 @@ class ViewController: UIViewController {
         let timeInterval: TimeInterval = 10
         // 1. normal
         countdownLabel1.setCountDownTime(minutes: timeInterval)
+        countdownLabel1.backgroundColor = .red
         countdownLabel1.countdownDelegate = self
         countdownLabel1.timeFormat = "mm:ss"
+//        countdownLabel1.font = UIFont.systemFont(ofSize: 11)
+//        countdownLabel1.textColor = .orange
         countdownLabel1.start()
 
         // option animation ( using LTMorphing inside )
@@ -148,14 +151,20 @@ class ViewController: UIViewController {
 }
 
 extension ViewController: CountdownLabelDelegate {
-    func countdownFinished() {
-        debugPrint("countdownFinished at delegate.")
-        countdownLabel1.text = "done"
+    func countdownFinished(_ countdownLabel: CountdownLabel) {
+        debugPrint("countdownFinished")
+        
+        if countdownLabel == countdownLabel1 {
+            countdownLabel.text = "countdownLabel1"
+        }
+        else {
+            countdownLabel.text = "done"
+        }
     }
     
-    func countingAt(timeCounted: TimeInterval, timeRemaining: TimeInterval) {
-        debugPrint("time counted at delegate=\(timeCounted)")
-        debugPrint("time remaining at delegate=\(timeRemaining)")
+    func countingAt(_ countdownLabel: CountdownLabel, timeCounted: TimeInterval, timeRemaining: TimeInterval) {
+        debugPrint("time counted at \(timeCounted)")
+        debugPrint("time remaining at \(timeRemaining)")
     }
     
 }

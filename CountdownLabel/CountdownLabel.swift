@@ -8,21 +8,28 @@
 
 import UIKit
 
-@objc public protocol CountdownLabelDelegate {
-    @objc optional func countdownStarted()
-    @objc optional func countdownPaused()
-    @objc optional func countdownFinished()
-    @objc optional func countdownCancelled()
-    @objc optional func countingAt(timeCounted: TimeInterval, timeRemaining: TimeInterval)
-
-}
 extension TimeInterval {
     var int: Int {
         return Int(self)
     }
 }
 
-public class CountdownLabel: LTMorphingLabel {
+@objc public protocol CountdownLabelDelegate: AnyObject {
+//    @objc optional func countdownStarted()
+//    @objc optional func countdownPaused()
+//    @objc optional func countdownFinished()
+//    @objc optional func countdownCancelled()
+//    @objc optional func countingAt(timeCounted: TimeInterval, timeRemaining: TimeInterval)
+    
+    @objc optional func countdownStarted(_ countdownLabel: CountdownLabel)
+    @objc optional func countdownPaused(_ countdownLabel: CountdownLabel)
+    @objc optional func countdownFinished(_ countdownLabel: CountdownLabel)
+    @objc optional func countdownCancelled(_ countdownLabel: CountdownLabel)
+    @objc optional func countingAt(_ countdownLabel: CountdownLabel, timeCounted: TimeInterval, timeRemaining: TimeInterval)
+
+}
+
+@objcMembers public class CountdownLabel: LTMorphingLabel {
     
     public typealias CountdownCompletion = () -> ()?
     public typealias CountdownExecution = () -> ()
@@ -166,7 +173,7 @@ public class CountdownLabel: LTMorphingLabel {
     // MARK: - Update
     @objc func updateLabel() {
         // delegate
-        countdownDelegate?.countingAt?(timeCounted: timeCounted, timeRemaining: timeRemaining)
+        countdownDelegate?.countingAt?(self, timeCounted: timeCounted, timeRemaining: timeRemaining)
         
         // then function execute if needed
         thens.forEach { k, v in
@@ -181,7 +188,7 @@ public class CountdownLabel: LTMorphingLabel {
         
         // if end of timer
         if endOfTimer {
-            countdownDelegate?.countdownFinished?()
+            countdownDelegate?.countdownFinished?(self)
             dispose()
             completion?()
         }
@@ -209,7 +216,7 @@ extension CountdownLabel {
         completion?()
         
         // set delegate
-        countdownDelegate?.countdownStarted?()
+        countdownDelegate?.countdownStarted?(self)
     }
     
     public func pause(completion: (() -> ())? = nil) {
@@ -231,18 +238,18 @@ extension CountdownLabel {
         completion?()
         
         // set delegate
-        countdownDelegate?.countdownPaused?()
+        countdownDelegate?.countdownPaused?(self)
     }
     
     public func cancel(completion: (() -> ())? = nil) {
-        text = dateFormatter.string(from: date1970.addingTimeInterval(0) as Date)
+//        text = dateFormatter.string(from: date1970.addingTimeInterval(0) as Date)
         dispose()
         
         // set completion if needed
         completion?()
         
         // set delegate
-        countdownDelegate?.countdownCancelled?()
+        countdownDelegate?.countdownCancelled?(self)
     }
     
     public func addTime(time: TimeInterval) {
@@ -313,28 +320,24 @@ extension CountdownLabel {
         if let day = comp.day ,let hour = comp.hour ,let minute = comp.minute ,let second = comp.second {
             
             if (timeFormat.range(of: "dd") != nil) {
-                //                labelText += String.init(format: "%02ld", day)
                 act_tags.append(String.init(format: "%02ld", day))
             }
             
             if (timeFormat.range(of: "hh") != nil) {
-                //                labelText += String.init(format: "%02ld", hour)
                 act_tags.append(String.init(format: "%02ld", hour))
             }
             
             if (timeFormat.range(of: "mm") != nil) {
-                //                labelText += String.init(format: "%02ld", minute)
                 act_tags.append(String.init(format: "%02ld", minute))
             }
             
             if (timeFormat.range(of: "ss") != nil) {
-                //                labelText += String.init(format: "%02ld", second)
                 act_tags.append(String.init(format: "%02ld", second))
             }
             
         }
         labelText = act_tags.joined(separator: ":")
-        print("labelText\(labelText)")
+//        print("labelText\(labelText)")
         return labelText
     }
     
